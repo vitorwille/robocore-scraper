@@ -1,0 +1,137 @@
+[
+  {
+    "id": 4,
+    "name": "KIMAUÁNISSO",
+    "top1": 85,
+    "top2": 65,
+    "top3": 49,
+    "total": 199,
+    "rank": 1
+  },
+  {
+    "id": 2,
+    "name": "ThundeRatz",
+    "top1": 43,
+    "top2": 45,
+    "top3": 46,
+    "total": 134,
+    "rank": 2
+  },
+  {
+    "id": 3,
+    "name": "Uai!rrior",
+    "top1": 45,
+    "top2": 35,
+    "top3": 33,
+    "total": 113,
+    "rank": 3
+  },
+  {
+    "id": 1,
+    "name": "RioBotz",
+    "top1": 54,
+    "top2": 32,
+    "top3": 26,
+    "total": 112,
+    "rank": 4
+  },
+  {
+    "id": 7,
+    "name": "RobotBulls",
+    "top1": 27,
+    "top2": 33,
+    "top3": 33,
+    "total": 93,
+    "rank": 5
+  },
+  {
+    "id": 5,
+    "name": "Trincabotz CEFET-MG",
+    "top1": 12,
+    "top2": 22,
+    "top3": 18,
+    "total": 52,
+    "rank": 6
+  },
+  {
+    "id": 14,
+    "name": "OMEGABOTZ",
+    "top1": 11,
+    "top2": 15,
+    "top3": 23,
+    "total": 49,
+    "rank": 7
+  },
+  {
+    "id": 9,
+    "name": "TROIA",
+    "top1": 23,
+    "top2": 15,
+    "top3": 9,
+    "total": 47,
+    "rank": 8
+  },
+  {
+    "id": 6,
+    "name": "Triton Robos",
+    "top1": 14,
+    "top2": 15,
+    "top3": 17,
+    "total": 46,
+    "rank": 9
+  },
+  {
+    "id": 12,
+    "name": "WickedBotz",
+    "top1": 9,
+    "top2": 14,
+    "top3": 13,
+    "total": 36,
+    "rank": 10
+  },
+  {
+    "id": 11,
+    "name": "MinervaBots",
+    "top1": 4,
+    "top2": 13,
+    "top3": 18,
+    "total": 35,
+    "rank": 11
+  },
+  {
+    "id": 13,
+    "name": "Phoenix",
+    "top1": 12,
+    "top2": 10,
+    "top3": 11,
+    "total": 33,
+    "rank": 12
+  },
+  {
+    "id": 10,
+    "name": "Imperial Botz",
+    "top1": 10,
+    "top2": 10,
+    "top3": 8,
+    "total": 28,
+    "rank": 13
+  },
+  {
+    "id": 8,
+    "name": "Equipe PUCPR de Robótica Móvel",
+    "top1": 6,
+    "top2": 9,
+    "top3": 6,
+    "total": 21,
+    "rank": 14
+  },
+  {
+    "id": 15,
+    "name": "ODDBotz",
+    "top1": 3,
+    "top2": 3,
+    "top3": 4,
+    "total": 10,
+    "rank": 15
+  }
+]
