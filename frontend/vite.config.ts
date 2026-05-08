@@ -4,8 +4,14 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  envDir: '../',
+  server: {
+    port: 4321,
+    strictPort: true,
+  },
   plugins: [
     tailwindcss(),
     react()
   ],
 })
+
