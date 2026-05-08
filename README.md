@@ -29,7 +29,13 @@ Dashboard criado para visualizar e acompanhar o desempenho das equipes na RoboCo
    npm install
    ```
 
-2. **Inicie o projeto** (Frontend + Backend):
+2. **Configure o seu .env**
+   ```bash
+   cp .env.example .env
+   ```
+   > Insira o endereço do backend. O endereço padrão é `http://localhost:3001`.
+
+3. **Inicie o projeto** (Frontend + Backend):
    ```bash
    npm run dev
    ```

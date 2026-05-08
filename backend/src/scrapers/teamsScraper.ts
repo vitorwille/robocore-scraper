@@ -2,15 +2,15 @@ import * as cheerio from 'cheerio';
 
 const $ = await cheerio.fromURL("https://events.robocore.net/teams/");
 
-const $top15Equipes = $('td a');
+const $equipesHome = $('td a');
 let equipes: string[] = [];
 let equipeNames: string[] = [];
 
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < $equipesHome.length; i++) {
     equipes.push(
-        $top15Equipes[i].attribs.href
+        $equipesHome[i].attribs.href
     )
-    equipeNames.push($top15Equipes.eq(i).text().trim());
+    equipeNames.push($equipesHome.eq(i).text().trim());
 }
 
 (globalThis as any).equipes = equipes;

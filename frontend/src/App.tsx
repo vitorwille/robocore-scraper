@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Trophy, Medal, Award, Crown, Moon, Sun } from 'lucide-react';
 
+
 interface TeamData {
   id: number;
   name: string;
@@ -14,11 +15,40 @@ interface TeamData {
 function App() {
   const [data, setData] = useState<TeamData[]>([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [scrapedCount, setScrapedCount] = useState(0);
+
+
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/scrape')
-      .then(r => r.json())
-      .then(d => setData(d));
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+    const eventSource = new EventSource(`${apiUrl}/api/scrape`);
+
+
+    eventSource.onmessage = (event) => {
+      setScrapedCount((prev) => prev + 1);
+    };
+
+
+    eventSource.addEventListener('done', (event: MessageEvent) => {
+      try {
+        const finalData = JSON.parse(event.data);
+        setData(finalData);
+        setIsLoading(false);
+        eventSource.close();
+      } catch (error) {
+        console.error('Error parsing final data:', error);
+        setIsLoading(false);
+      }
+    });
+
+    eventSource.onerror = (err) => {
+      console.error('EventSource failed:', err);
+      setIsLoading(false);
+      eventSource.close();
+    };
+
+    return () => eventSource.close();
   }, []);
 
   const toggleDarkMode = () => {
@@ -36,25 +66,27 @@ function App() {
               <Trophy className="w-8 h-8 text-white" />
             </div>
             <div>
-              <h1 className={`text-2xl md:text-3xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>RoboCore - Rankings</h1>
+              <h1 className={`text-2xl md:text-3xl font-bold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>RoboCore - Ranking</h1>
               <a href="https://github.com/vitorwille/" target="_blank" className={`text-sm md:text-base font-medium mt-1 underline transition-colors ${isDarkMode ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'
                 }`}>github.com/vitorwille</a>
+              <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Este dashboard faz o scraping apenas das 100 equipes presentes na homepage do painel de eventos da RoboCore.<br />Algumas equipes podem não estar presentes na lista abaixo.</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <button
               onClick={toggleDarkMode}
-              className={`p-3 rounded-xl border transition-all duration-300 ${isDarkMode
+              className={`w-10 h-10 rounded-full border transition-all duration-300 flex items-center justify-center shrink-0 ${isDarkMode
                 ? 'bg-slate-700 border-slate-600 text-yellow-400 hover:bg-slate-600'
                 : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm'
                 }`}
             >
-              {isDarkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+              {isDarkMode ? <Sun className="w-5 h-5 grayscale" /> : <Moon className="w-5 h-5 grayscale" />}
             </button>
             <div className={`text-center px-4 py-2 rounded-lg border transition-colors ${isDarkMode ? 'bg-slate-700 border-slate-600' : 'bg-slate-50 border-slate-100'
               }`}>
-              <p className={`text-xs uppercase font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Equipes Contabilizadas</p>
-              <p className={`text-xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-slate-800'}`}>TOP {data.length}</p>
+              <p className={`text-xs uppercase font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Equipes exibidas</p>
+              <p className={`text-xl font-bold ${isDarkMode ? 'text-blue-400' : 'text-slate-800'}`}>{data?.length} EQUIPES</p>
+
             </div>
           </div>
         </div>
@@ -86,20 +118,20 @@ function App() {
                       3º Lugar
                     </div>
                   </th>
-                  <th className="px-4 md:px-6 py-4 text-right">Pódios</th>
+                  <th className="px-4 md:px-6 py-4 text-right">Troféus totais</th>
                 </tr>
               </thead>
               <tbody className={`divide-y transition-colors ${isDarkMode ? 'divide-slate-700' : 'divide-slate-100'}`}>
-                {data.map((team) => (
+                {data.map((team, index) => (
                   <tr key={team.id} className={`transition-colors duration-200 group ${isDarkMode ? 'hover:bg-slate-700/50' : 'hover:bg-blue-50/50'
                     }`}>
                     <td className="px-4 md:px-6 py-4">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm md:text-base ${team.rank === 1 ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
-                        team.rank === 2 ? 'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' :
-                          team.rank === 3 ? 'bg-amber-50 text-amber-900 dark:bg-amber-800/20 dark:text-amber-500' :
-                            isDarkMode ? 'bg-slate-800 text-slate-500' : 'bg-slate-50 text-slate-500'
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full font-bold text-sm md:text-base ${team.rank === 1 ? isDarkMode ? 'border-1 border-white/40 bg-amber-400/30 text-amber-200' : 'border-1 border-black/60 bg-amber-400/60 text-amber-700' :
+                        team.rank === 2 ? isDarkMode ? 'border-1 border-white/40' : 'border-1 border-black/60 bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300' :
+                          team.rank === 3 ? isDarkMode ? 'border-1 border-white/40 bg-amber-900/30 text-orange-100' : 'border-1 border-black/60 bg-amber-900 text-orange-100' :
+                            isDarkMode ? 'bg-slate-900 text-slate-500' : 'bg-slate-200 text-slate-600'
                         }`}>
-                        {team.rank}
+                        {team.rank > 0 ? team.rank : index + 1}
                       </div>
                     </td>
                     <td className={`px-4 md:px-6 py-4 font-semibold text-sm md:text-base ${isDarkMode ? 'text-slate-200' : 'text-slate-900'}`}>
@@ -125,10 +157,19 @@ function App() {
               </tbody>
             </table>
           </div>
-          {data.length === 0 && (
-            <div className={`p-12 text-center flex flex-col items-center ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+          {isLoading && (
+            <div className={`p-12 text-center flex flex-col items-center w-full ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
               <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-              Executando scraper - aguarde...
+              <span>Executando scraper - aguarde...</span>
+              <span className="mb-8 text-xs opacity-80">Isto pode levar um certo tempo. Equipes contabilizadas: {scrapedCount}/100</span>
+
+              {data.length === 0 && (
+                <div className="w-full space-y-4">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className={`h-12 w-full rounded-lg animate-pulse ${isDarkMode ? 'bg-slate-600/50' : 'bg-slate-200'}`}></div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
